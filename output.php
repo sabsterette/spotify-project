@@ -1,34 +1,26 @@
 <?php
 
-function printValues($arr) {
-	global $count;
-	global $values;
-	if(!is_array($arr)) {
-		die("Input not array");
-	}
-	foreach($arr as $key=>$value) {
-		if (is_array($value)) {
-			printValues($value);
-		} else {
-			$values[] = $value;
-			$count++;
-		}
-	}
-	return array('total'=> $count, 'values' => $values);		
+function getTrackAnalysis($tracks) {//, $client_id, $token) {
+	echo "song name: " . $tracks['track']['name'] . "; ";
+	echo "artist: ";
+	$artists=$tracks['track']['artists'];
+        foreach($artists as $artist) {
+                echo $artist['name'] . "; ";
+        }
+        echo "song id: " . $tracks['track']['id'] . "<br>";
+
 }
-echo "hello";
+$client_id="fb7853c47e8d4db0a7118e65d99d4b4b";
+
+$token=file_get_contents("token-playlist.txt");
+$token=preg_replace('/.* /', "", $token);
+echo $token . "<br>";
 $tracksjson=file_get_contents("playlist.json");
+var_dump($tracksjson);
 $arr=json_decode($tracksjson, true);
-$tracks=$arr['tracks']['items'];
-foreach($tracks as $key=>$value) {
-	foreach($value as $key2=>$value2) {	
-		$moretracks=$value2['track'];
-		var_dump($moretracks);
-	}		
+$items=$arr['tracks']['items'];
+foreach($items as $item) {
+	getTrackAnalysis($item);
 }
-#var_dump($trackarr);
-#$result = printValues($arr);
-#echo $result["total"] . " values found:";
-#echo implode("<br>", $result["values"]);
 
 ?>

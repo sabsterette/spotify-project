@@ -23,6 +23,7 @@ if (empty($_GET["tokenurl"])) {
 	echo nl2br("$token\n");
         $playlist=$_GET["playlisturl"];
 	$playlist=preg_replace('/.*list\//', "", $playlist);
+	#$playlist=preg_replace('/?.*/', "", $playlist);
         echo nl2br("$playlist\n");
 	if(empty($playlist) || empty($token)) {
 		echo "one or more of URLS are incorrect, please try again";
