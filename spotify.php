@@ -31,22 +31,13 @@ if (empty($_GET["tokenurl"])) {
 	else {
 		$token_play_file=fopen("token-playlist.txt", "w") or die("can't open");
 		fwrite($token_play_file, $token);
-		fwrite($token_play_file, "\n");
+		fwrite($token_play_file, ";;");
 		fwrite($token_play_file, $playlist);
 		fclose($token_play_file);
 		exec("curl -X GET \"https://api.spotify.com/v1/playlists/$playlist/tracks\" -H \"Authorization: Bearer $token\" > playlist.json");
-		//$ch=curl_init($playlist_endpoint);
-		//$fp=fopen("playlist.json", "w") or die ("cant open playlist");
-		
-		//curl_setopt($ch, CURLOPT_FILE, $fp);
-		//curl_setopt($ch, CURLOPT_HEADER, 0);
-
-		//curl_exec($ch);
-		//if(curl_error($ch)) {
-		//	fwrite($fp, curl_error($ch));
-		//}
-		//curl_close($ch);
-		//fclose($fp);
+		echo "Thanks for the urls! <br>";
+		echo "<a href='output.php'> Proceed to the next page to sort your playlist </a>";
+		echo "<br> Please note that it might take awhile to load";
 	}
 }
 // check for incorrect tokens
