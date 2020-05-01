@@ -28,9 +28,6 @@ function getTrackAnalysis($tracks, $token) {//, $client_id, $token) {
 	
 	$audio_features=file_get_contents("feature.json");
 	$features=json_decode($audio_features, true);
-	#$artists=$tracks['track']['artists'];
-	#var_dump($artists);
-	foreach($artists as $artist) {echo $artist['name'];}
 	$song=new Song();
 	$song->set_id($tracks['track']['id']);
 	$song->set_name($tracks['track']['name']);
@@ -99,21 +96,27 @@ switch($sortby) {
 		usort($songarray, "cmpDanceability");
 		break;
 }
-
+foreach($songarray as $song) {
+	$testkey=$song->get_key();
+	if(!isset($testkey)) {
+		echo "<a href='spotify.php'> PLEASE GO BACK AND AUTHORIZE AGAIN </a>"; 
+		return 0;
+	}
+}
 echo "<table> \n\t <tr> \n\t\t<th> Song Name </th> \n\t\t<th> Key </th>";
-echo "\n\t\t<th> Loudness </th>\n\t\t<th> Danceability </th>\n\t</tr>";
+echo "\n\t\t<th> Loudness </th>\n\t\t<th> Danceability </th>\n\t\t<th> Artists </th>\n\t</tr>";
 foreach($songarray as $song) {
 	echo "\n\t<tr>";
-	echo "\n\t\t<td>" . $song->get_name() ."</td>";
+	echo "\n\t\t<td>" . "<a href='https://open.spotify.com/track/" . $song->get_id() . "' target=\"_blank\">" . $song->get_name() ."</a></td>";
 	echo "\n\t\t<td>" . $letterKey[$song->get_key()] . "</td>";
 	echo "\n\t\t<td>" . $song->get_loudness() . "</td>";
 	echo "\n\t\t<td>" . $song->get_danceability() . "</td>";
-        #echo "\n\t\t<td>\n\t\t\t<ul>";
-	#$artists=$song->get_artists();
-        #foreach($artists as $artist) {
-        #        echo "\n\t\t\t<li>" . $artist['name'] . "</li>";
-        #}
-        #echo "\n\t\t\t</ul> \n\t\t</td>";
+        echo "\n\t\t<td>\n\t\t\t<ul>";
+	$artists=$song->get_artists();
+        foreach($artists as $artist) {
+                echo "\n\t\t\t<li>" . $artist['name'] . "</li>";
+        }
+        echo "\n\t\t\t</ul> \n\t\t</td>";
 	echo "\n\t</tr>";
 }
 echo "</table> \n";
